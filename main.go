@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 )
@@ -118,6 +119,20 @@ func GetMainBranchName(username string, reponame string) (string, error) {
 	return obj.DefaultBranch, nil
 }
 
+func InitRepo(path string) error {
+	gitBin, _ := exec.LookPath("git")
+
+	cmd := &exec.Cmd{
+		Path:   gitBin,
+		Args:   []string{gitBin, "init", path},
+		Stdout: os.Stdout,
+		Stdin:  os.Stdin,
+	}
+
+	err := cmd.Run()
+	return err
+}
+
 func main() {
 	var dstPath string
 	args := os.Args
@@ -170,4 +185,7 @@ func main() {
 
 	// Remove the temp folder
 	defer os.RemoveAll(tempDir)
+
+	// Init the repo
+	InitRepo(dstPath)
 }
