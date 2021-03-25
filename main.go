@@ -3,6 +3,7 @@ package main
 import (
 	"archive/zip"
 	"encoding/json"
+	"flag"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -143,35 +144,54 @@ func CheckIsGitInstalled() bool {
 
 func main() {
 	var dstPath string
-	args := os.Args
-	if len(args) == 0 {
-		fmt.Println("Must provide a github URL")
-		return
-	}
+	var branchName string
+	// args := os.Args
+	// if len(args) == 0 {
+	// 	fmt.Println("Must provide a github URL")
+	// 	return
+	// }
 	isGitInstalled := CheckIsGitInstalled()
 	if isGitInstalled == false {
 		fmt.Println("git not found. Repository will not be intialized automatically.")
 	}
 
-	repoUrl := args[1]
+	branchNamePtr := flag.String("branch", "", "The name of the branch to download.")
+	outPtr := flag.String("out", "", "Destination path of the project.")
+	flag.Parse()
+
+	tail := flag.Args()
+
+	if len(tail) == 0 {
+		fmt.Println("A GitHub url must be speficied.")
+		return
+	}
+
+	// TODO: Add extra validation to this
+	repoUrl := tail[0]
 	splitGitUrl := strings.Split(repoUrl, "/")
 	username := splitGitUrl[3]
 	reponame := splitGitUrl[4]
 
 	// Setup
-	if len(args) > 2 {
-		dstPath = args[2]
-	} else {
+	if *outPtr == "" {
 		dstPath = reponame
+	} else {
+		dstPath = *outPtr
 	}
 
 	// Get main branch
-	branchName, err := GetMainBranchName(username, reponame)
-	check(err)
+	if *branchNamePtr == "" {
+		mainBranchName, err := GetMainBranchName(username, reponame)
+		check(err)
+		branchName = mainBranchName
+	} else {
+		// TODO: Check if the branch exists here
+		branchName = *branchNamePtr
+	}
 
 	// Create temp folder
 	tempDir := ".templify-temp"
-	err = os.Mkdir(".templify-temp", 0755)
+	err := os.Mkdir(".templify-temp", 0755)
 	check(err)
 
 	// Download the archive

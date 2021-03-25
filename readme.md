@@ -7,14 +7,14 @@ A small CLI utility to use any GitHub repo as a template for your project.
 Simply call the executable with the URL of the repository you want to use as a template and the tool will download the latest version of the main branch into the working directory and initialize it as a new repository.
 
 ```bash
-./templify.exe https://github.com/bmorrisondev/faunaservice
+templify.exe https://github.com/bmorrisondev/faunaservice
 ```
 
-You can optionally specify a different directory as well.
+You can optionally specify a different branch or directory as well.
 
 ```bash
-# This will create a folder called 'my-new-project' with the contents of the source repo
-templify https://github.com/bmorrisondev/faunaservice my-new-project
+# This will create a folder called 'some-output-folder' with the contents of the source repo, specifically the 'dev' branch
+templify -branch=dev -out=some-output-folder https://github.com/bmorrisondev/faunaservice
 ```
 
 ## Contributing
