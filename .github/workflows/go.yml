@@ -23,4 +23,13 @@ jobs:
       
     - name: ls
       run: ls
+      
+    - name: make release
+      if: github.event.ref_type == 'tag'
+      uses: actions-cool/release-helper@v1.2.0
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        triger: 'tag'
+        changelogs: 'CHANGELOG.en-US.md, CHANGELOG.zh-CN.md'
+        branch: 'master'
     
