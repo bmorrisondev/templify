@@ -25,7 +25,8 @@ jobs:
     - name: Create release
       uses: ncipollo/release-action@v1
       with:
-        artifact: dist/templify.exe
+        artifacts: dist/templify.exe
         token: ${{ secrets.GITHUB_TOKEN }}
+        bodyFile: changelog.md
         
     
