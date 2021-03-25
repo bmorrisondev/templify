@@ -145,11 +145,6 @@ func CheckIsGitInstalled() bool {
 func main() {
 	var dstPath string
 	var branchName string
-	// args := os.Args
-	// if len(args) == 0 {
-	// 	fmt.Println("Must provide a github URL")
-	// 	return
-	// }
 	isGitInstalled := CheckIsGitInstalled()
 	if isGitInstalled == false {
 		fmt.Println("git not found. Repository will not be intialized automatically.")
