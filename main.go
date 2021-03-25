@@ -133,12 +133,24 @@ func InitRepo(path string) error {
 	return err
 }
 
+func CheckIsGitInstalled() bool {
+	binPath, _ := exec.LookPath("git")
+	if binPath != "" {
+		return true
+	}
+	return false
+}
+
 func main() {
 	var dstPath string
 	args := os.Args
 	if len(args) == 0 {
 		fmt.Println("Must provide a github URL")
 		return
+	}
+	isGitInstalled := CheckIsGitInstalled()
+	if isGitInstalled == false {
+		fmt.Println("git not found. Repository will not be intialized automatically.")
 	}
 
 	repoUrl := args[1]
@@ -187,5 +199,7 @@ func main() {
 	defer os.RemoveAll(tempDir)
 
 	// Init the repo
-	InitRepo(dstPath)
+	if isGitInstalled {
+		InitRepo(dstPath)
+	}
 }
