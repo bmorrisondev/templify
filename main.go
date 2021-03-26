@@ -152,6 +152,7 @@ func main() {
 
 	branchNamePtr := flag.String("branch", "", "The name of the branch to download.")
 	outPtr := flag.String("out", "", "Destination path of the project.")
+	shouldNotInitPtr := flag.Bool("no-init", false, "If set, templify will not automatically initialize the repo.")
 	flag.Parse()
 
 	tail := flag.Args()
@@ -214,7 +215,7 @@ func main() {
 	defer os.RemoveAll(tempDir)
 
 	// Init the repo
-	if isGitInstalled {
+	if isGitInstalled && *shouldNotInitPtr == false {
 		InitRepo(dstPath)
 	}
 }
