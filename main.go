@@ -108,11 +108,9 @@ func VerifyBranchName(username string, reponame string, branchName string) bool 
 	if err != nil {
 		check(err)
 	}
-
 	if response.StatusCode == http.StatusNotFound {
 		return false
 	}
-
 	return true
 }
 
